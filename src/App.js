@@ -7,6 +7,20 @@ function App() {
   const [text, setText] = useState('')
   const [loading, setLoading] = useState(false)
   const [memes, setMemes] = useState([])
+
+  async function getMemes(){
+    setLoading(true)
+    setMemes([])
+    let url = 'https://api.giphy.com/v1/gifs/search?'
+    url += 'api_key=' + 'jhQazp87aPuMIRIZoFu2kaI2Uk5GjZRJ'
+    url += '&q=' + text
+    const r = await fetch(url)
+    const j = await r.json()
+    setMemes(j.data)
+    setLoading(false)
+    setText('')
+}
+  console.log(memes)
   return (
     <Wrap>
       <Header>
@@ -14,15 +28,20 @@ function App() {
           value={text} onChange={e=> setText(e.target.value)} autoFocus
         />
         <Button variant="contained" color="primary" style={{height:55, marginLeft:10, width:100}}
-           disabled={!text}>
+           disabled={!text || loading} onClick={getMemes}>
            Search
         </Button>
       </Header>
       <Body>
+        {memes.map(m=> <Meme src={m.images.fixed_width.url} />)}
       </Body>
     </Wrap>
   );
 }
+
+const Meme = styled.img`
+  max-height:200px
+`
 const Wrap = styled.div`
   display:flex;
   flex-direction:column;
