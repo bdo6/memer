@@ -33,7 +33,7 @@ function App() {
         </Button>
       </Header>
       <Body>
-        {memes.map(m=> <Meme src={m.images.fixed_width.url} />)}
+        {memes.map(m=> <Meme key={m.id} src={m.images.fixed_width.url} />)}
       </Body>
     </Wrap>
   );
