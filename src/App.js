@@ -101,5 +101,6 @@ const Body = styled.div`
   flex-wrap:wrap;
   flex:1;
   overflow:auto;
+  justify-content:center;
 `
 export default App;
