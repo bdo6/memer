@@ -6,12 +6,14 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 
 function App() {
   const [text, setText] = useState('')
+  const [term, setTerm] = useState('')
   const [loading, setLoading] = useState(false)
-  const [memes, setMemes] = useState([])
+  const [memes, setMemes] = useState(null)
 
   async function getMemes(){
+    setTerm('')
     setLoading(true)
-    setMemes([])
+    setMemes(null)
     let url = 'https://api.giphy.com/v1/gifs/search?'
     url += 'api_key=' + 'jhQazp87aPuMIRIZoFu2kaI2Uk5GjZRJ'
     url += '&q=' + text
@@ -19,6 +21,7 @@ function App() {
     const j = await r.json()
     setMemes(j.data)
     setLoading(false)
+    setTerm(text)
     setText('')
 }
   console.log(memes)
@@ -35,17 +38,45 @@ function App() {
         </Button>
       </Header>
       {loading && <LinearProgress />}
-      <Body>
-        {memes.map(m=> <Meme key={m.id} src={m.images.fixed_width.url} />)}
-      </Body>
+
+      {term && <Term>
+        <span>Results for:</span>
+        <strong>{term}</strong>
+      </Term>}
+      
+      {memes && memes.length===0 && <Empty>
+        no memes found!
+      </Empty>}
+
+      {memes && memes.length>0 && <Body>
+        {memes && memes.map(m=> {
+          const img = m.images && m.images.fixed_width && m.images.fixed_width.url
+          return <Meme key={m.id} src={img} />
+        })}
+      </Body>}
+
     </Wrap>
   );
 }
 
+const Term = styled.p`
+  width:100%;
+  text-align:center;
+  & strong {
+    margin-left:5px;
+    font-size:16px;
+  }
+`
+const Empty = styled.p`
+  width:100%;
+  text-align:center;
+`
+const size = 200
 const Meme = styled.img`
-  max-height: 200px;
-  max-width: 200px;
-  min-width: 200px;
+  max-height: ${size}px;
+  max-width: ${size}px;
+  min-width: ${size}px;
+  min-height: ${size}px;
   object-fit: cover;
   margin: 5px;
 `
