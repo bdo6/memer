@@ -1,15 +1,21 @@
-import React from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 function App() {
+  const [text, setText] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [memes, setMemes] = useState([])
   return (
     <Wrap>
       <Header>
-        <TextField label="Search for memes" variant="outlined" style={{width:'calc(100% - 110px)'}} />
-        <Button variant="contained" color="primary" style={{height:55, marginLeft:10, width:100}}>
-          Search
+        <TextField label="Search for memes" variant="outlined" style={{width:'calc(100% - 110px)'}} 
+          value={text} onChange={e=> setText(e.target.value)} autoFocus
+        />
+        <Button variant="contained" color="primary" style={{height:55, marginLeft:10, width:100}}
+           disabled={!text}>
+           Search
         </Button>
       </Header>
       <Body>
